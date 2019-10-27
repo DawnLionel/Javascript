@@ -23,12 +23,6 @@ let vm = new Vue({
             return (newStr == str);
         }
     },
-    watch: {
-        fullName: function (newVal, oldVal) {
-            console.log("newVal:" + newVal);
-            console.log("oldVal:" + oldVal);
-        }
-    },
     computed: {
         birthday: function () {
             let num = this.idCard;
@@ -105,7 +99,6 @@ let vm = new Vue({
                 if (md != "undefined") {
                     for (x in constellations) {
                         if (parseInt(md) <= parseInt(constellations[x].End) && parseInt(md) >= parseInt(constellations[x].Start)) {
-                            console.log(md);
                             cst = constellations[x].Name;
                             break;
                         }
