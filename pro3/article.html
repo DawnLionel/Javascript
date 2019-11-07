@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>内容页</title>
+    <!--
+    在移动端为了让页面和设备快速的匹配，我们通过设定页面的viewport来处理不同屏幕分辨率的兼容
+    -->
+    <link href="assets/style/vant.css" rel="stylesheet" type="text/css">
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/vant.min.js"></script>
+    <script src="compontents/mytabbar.js"></script>
+    <style>
+        .cellTable1 {
+            background: #1989fa;
+        }
+
+        .cellTable2 {
+            background: #07c160;
+        }
+
+        .cellTable3 {
+            background: #ffd01e;
+        }
+    </style>
+</head>
+<body>
+<section id="app1">
+    <van-nav-bar
+            :title=channel
+            left-arrow
+            left-text="返回"
+            v-on:click-left="goBack"
+    >
+        <van-icon name="star-o" size="20px" :color=starColor slot="right" @click="onClick"></van-icon>
+        <van-icon name="ellipsis" size="20px" slot="right"></van-icon>
+    </van-nav-bar>
+</section>
+<section id="app2" style="margin: 15px">
+    <h1>{{newTitle}}</h1>
+    <h5 style="color:#888888;">{{time+" "+course}}</h5>
+    <van-image
+            width="100%"
+            height="100%"
+            src="assets/img/new3.png"
+    >
+    </van-image>
+    <p>{{content}}</p>
+    <address v-if=false>
+        Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
+    </address>
+</section>
+<script>
+    let app1 = new Vue({
+        el: "#app1",
+        data: {
+            channel: "新闻频道",
+            starColor: "#1989fa",
+            colorFlag: 0,
+        },
+        watch: {},
+        methods: {
+            goBack: function (event) {
+                window.location.href = 'index.html';
+            },
+            onClick: function (event) {
+                if (this.colorFlag == 0) {
+                    console.log("你已收藏");
+                    this.colorFlag = (this.colorFlag + 1) % 2;
+                    this.starColor = "#ffd01e";
+                } else {
+                    console.log("你已取消收藏");
+                    this.colorFlag = (this.colorFlag + 1) % 2;
+                    this.starColor = "#1989fa";
+                }
+            }
+
+        }
+    });
+    let app2 = new Vue({
+        el: "#app2",
+        data: {
+            newTitle: "何君尧被母校剥夺名誉博士学位:英国真实面目暴露",
+            time: "2019-10-29 15:17",
+            course: "环球网",
+            content: "【环球时报-环球网报道】英国网站“The Spectator”28日称，由于英国上议院议员奥尔顿勋爵(Lord Alton of Liverpool)去信安格里亚鲁斯金大学(Anglia Ruskin University，ARU)列举香港立法会议员何君尧的“不当行为”，何君尧被英国安格里亚鲁斯金大学褫夺名誉博士学位。29日，何君尧独家回应《环球时报》记者时表示，奥尔顿对他的指控均不实，对此事感到遗憾，不排除用法律手段解决，他同时表示，这件事暴露了英国所谓法律的“程序公正”很脆弱，“轻轻一推就倒下来”。\n" +
+                "\n" +
+                "据悉，奥尔顿勋爵曾去信安格里亚鲁斯金大学，称何君尧“曾发表有关大屠杀、攻击同性恋、攻击女性以及种族主义”的言论，因此促请校方褫夺何君尧的名誉博士学位。安格里亚鲁斯金大学随后在回复媒体查询时确认了该消息，并在较早前发出声明称“获安格里亚鲁斯金大学颁发名誉学位人士，必须为我们的学生、校友和员工，以及我们所服务的社区树立正面榜样。自何先生获颁发名誉学位以来，其行为持续引起关注。大学经过调查后，已撤销何先生的名誉学位。”\n" +
+                "\n" +
+                "在29日接受《环球时报》记者采访时，何君尧表示，自己跟奥尔顿素不相识，只知道他是在周六去信安格里亚鲁斯金大学对自己进行所谓指控的，“他只是道听途说，没有对事实的考证，非常草率。而大学没有跟我联络，也没有进行相关调查。”根据公开信息，何君尧1984年毕业于英国州玛高等教育学院(现安格里亚鲁斯金大学)。2011年，安格里亚鲁斯金大学授予他名誉博士学位，以表彰他的法律工作和作为母校大使的努力。\n" +
+                "\n" +
+                "何君尧猜测，奥尔顿所谓的“指控”可能是扭曲了自己在立法会里的一些发言，比如此前自己曾讥讽“港独”议员毛孟静“食惯洋肠”(意为吃洋餐比较多)，也曾表达过不支持同性婚姻的态度，但自己绝无种族主义倾向或歧视同性恋群体。“有可能我的话不合他的意见，但议员在立法会里的言论是受保障的，他是英国上议院议员，也是过来人，但他选择不理会，而是在8000公里外的英国算计我。我是民选的议员，在过去五个月里，大家看的很清楚，真正扰乱香港社会的是哪些人。”\n" +
+                "\n" +
+                "“这件事暴露了英国所谓的讲究法律程序公正都是假的，在政治面前一切都要让路。”何君尧说，安格里亚鲁斯金大学根本不懂得处理大是大非的事情，自己没有任何回应的机会。“所以不要看它是什么‘百年老店’，英国所谓的法律程序公正只需要轻轻用手指一推，就倒下来了。”何君尧说，这件事对自己个人是个遗憾，但最大的遗憾是英国的真实面目被暴露出来了。\n" +
+                "\n" +
+                "何君尧告诉《环球时报》记者，自己接下来不排除要“找个律师据理力争一下”，“到时候，我会把名誉博士名号送还给安格里亚鲁斯金大学，而不是让它来剥夺。”\n" +
+                "\n" +
+                "作者：范凌志\n" +
+                "\n" +
+                "(原标题：何君尧被英大学剥夺名誉博士学位后首度发声：英国的真实面目被暴露出来了)\n" +
+                "\n" +
+                "(责任编辑：苏泓珵_NBJ9980)"
+        },
+        watch: {},
+        methods: {}
+    });
+</script>
+</body>
+</html>

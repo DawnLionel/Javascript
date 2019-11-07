@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>天气</title>
+    <!--
+    在移动端为了让页面和设备快速的匹配，我们通过设定页面的viewport来处理不同屏幕分辨率的兼容
+    -->
+    <link href="assets/style/vant.css" rel="stylesheet" type="text/css">
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/vant.min.js"></script>
+    <script src="compontents/mytabbar.js"></script>
+    <script src="js/area.js"></script>
+    <script src="lib/axios.js"></script>
+    <style>
+        .cellTable1 {
+            background: #1989fa;
+        }
+
+        .cellTable2 {
+            background: #07c160;
+        }
+
+        .cellTable3 {
+            background: #ffd01e;
+        }
+    </style>
+</head>
+<body>
+<section id="app">
+    <van-nav-bar
+            title="天气"
+            left-arrow
+            left-text="返回"
+            v-on:click-left="goBack"
+    ></van-nav-bar>
+    <van-image width="100%" src="assets/img/timg.png"></van-image>
+    <van-cell icon="location-o" :title="city" is-link @click="showPopup"></van-cell>
+    <van-popup v-model="show">
+        <van-area
+                :area-list="areaList"
+                title="城市"
+                :columns-num="2"
+                @confirm="getAreaInfo"
+                @cancel="myCancel"
+        >
+        </van-area>
+    </van-popup>
+
+    <van-cell v-if="tabsSeen" size="large">
+        <van-text>{{pub}}</van-text>
+        <br>
+        <van-text>{{aqi}}</van-text>
+        <br>
+        <van-text>{{pm25}}</van-text>
+        <br>
+        <van-text>生活小贴士</van-text>
+        <van-switch
+                v-model="checked"
+                size="15px"
+                @input="lifeClick">
+        </van-switch>
+    </van-cell>
+
+
+    <van-tabs v-model="tabActive" v-if="tabsSeen" animated swipeable>
+        <van-tab v-for="tab in myTab" :title=tab.week v-if="tab.weekSeen">
+            <section style="text-align: center">
+                <van-text>{{tab.date}}</van-text>
+            </section>
+            <van-row>
+                <van-col v-if="tab.dawn.seen" span="8" align="center">
+                    {{tab.dawn.period}}<br>
+                    {{tab.dawn.weather}}<br>
+                    {{tab.dawn.temperature}}<br>
+                    {{tab.dawn.wind}}
+                </van-col>
+                <van-col v-if="tab.day.seen" span="8" align="center">
+                    {{tab.day.period}}<br>
+                    {{tab.day.weather}}<br>
+                    {{tab.day.temperature}}<br>
+                    {{tab.day.wind}}
+                </van-col>
+                <van-col v-if="tab.night.seen" span="8" align="center">
+                    {{tab.night.period}}<br>
+                    {{tab.night.weather}}<br>
+                    {{tab.night.temperature}}<br>
+                    {{tab.night.wind}}
+                </van-col>
+            </van-row>
+        </van-tab>
+    </van-tabs>
+    <van-divider></van-divider>
+    <van-tag v-if="lifeShow" type="success" size="large" round style="margin-left: 15px">生活小贴士</van-tag>
+    <!--
+    <van-cell
+            v-for="life in lifeReminder"
+            v-if="lifeShow"
+            :title="life.name"
+            :label="life.degree"
+            :value="life.info"
+    >
+    </van-cell>
+    -->
+    <van-panel
+            v-for="life in lifeReminder"
+            v-if="lifeShow"
+            :title="life.name"
+            :status="life.degree">
+        <div style="margin: 15px">{{life.info}}</div>
+        <van-divider></van-divider>
+    </van-panel>
+    <van-divider></van-divider>
+    <mytabbar :active="2"></mytabbar>
+    <address v-if=false>
+        Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
+    </address>
+</section>
+
+<script>
+    let app = new Vue({
+        el: "#app",
+        data: {
+            active: 2,
+            tabActive: 1,
+            city: "选择城市",
+            pub: "",
+            show: false,
+            tabsSeen: false,
+            lifeShow: false,
+            checked: false,
+            pm25: "",
+            aqi: "",
+            myTab: [
+                {
+                    week: "昨天",
+                    weekSeen:false,
+                    date: "",
+                    dawn: {
+                        seen: false,
+                        period: "早晨",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    day: {
+                        seen: true,
+                        period: "白天",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    night: {
+                        seen: true,
+                        period: "夜晚",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                },
+                {
+                    week: "今天",
+                    weekSeen:true,
+                    date: "",
+                    dawn: {
+                        seen: true,
+                        period: "早晨",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    day: {
+                        seen: true,
+                        period: "白天",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    night: {
+                        seen: true,
+                        period: "夜晚",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                },
+                {
+                    week: "明天",
+                    weekSeen:true,
+                    date: "",
+                    dawn: {
+                        seen: true,
+                        period: "早晨",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    day: {
+                        seen: true,
+                        period: "白天",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    night: {
+                        seen: true,
+                        period: "夜晚",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                },
+                {
+                    week: "后天",
+                    weekSeen:true,
+                    date: "",
+                    dawn: {
+                        seen: true,
+                        period: "早晨",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    day: {
+                        seen: true,
+                        period: "白天",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    night: {
+                        seen: true,
+                        period: "夜晚",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                },
+                {
+                    week: "大后天",
+                    weekSeen:true,
+                    date: "",
+                    dawn: {
+                        seen: true,
+                        period: "早晨",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    day: {
+                        seen: true,
+                        period: "白天",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    night: {
+                        seen: true,
+                        period: "夜晚",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                },
+                {
+                    week: "大大后天",
+                    weekSeen:true,
+                    date: "",
+                    dawn: {
+                        seen: true,
+                        period: "早晨",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    day: {
+                        seen: true,
+                        period: "白天",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                    night: {
+                        seen: true,
+                        period: "夜晚",
+                        weather: "",
+                        temperature: "",
+                        wind: "",
+                    },
+                },
+            ],
+            lifeReminder: [
+                {
+                    name: "空调",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "过敏",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "舒适度",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "穿衣",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "钓鱼",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "感冒",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "污染",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "紫外线",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "洗车",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "运动",
+                    degree: "",
+                    info: "",
+                },
+                {
+                    name: "雨伞",
+                    degree: "",
+                    info: "",
+                },
+
+            ],
+        },
+        mounted:function (){
+            this.getAreaInfo([{code: "", name: ""},{code: "", name: ""}]);
+        },
+        methods: {
+            goBack: function (event) {
+                window.location.href = 'index.html';
+            },
+            getAreaInfo: function (event) {
+                let vm = this;
+                let a = new Array("日", "一", "二", "三", "四", "五", "六");
+                let week = new Date().getDay();
+                vm.myTab[4].week = "周" + a[(week + 3) % 7];
+                vm.myTab[5].week = "周" + a[(week + 4) % 7];
+                vm.tabsSeen = true;
+                vm.show = false;
+                let area = event;
+                let city = area[1].name;
+                city = city.substr(0, city.length - 1);
+                Vue.prototype.$axios = axios;
+                vm.$axios.get('http://widget.cifuwu.com/weather/?city=' + city).then(function (response) {
+                    let res = response.data;
+                    //----------------------------------
+                    //以下代码全部需要重写
+                    //----------------------------------
+                    let pubtime = res.data.realtime.date + " " + res.data.realtime.time;
+                    vm.pub = "发布时间：" + pubtime;
+                    vm.city=res.data.area[1][0];
+                    let pm25 = res.data.pm25.pm25[0];
+                    let aqi = res.data.pm25.aqi[0];
+                    vm.pm25 = "PM2.5指数：" + pm25;
+                    vm.aqi = "空气质量指数：" + aqi;
+                    //-----------昨天-----------
+                    let yesterday = res.data.historyWeather.history["1"];
+
+                    let yesterdayDate = yesterday.date;
+                    vm.myTab[0].date = yesterdayDate;
+
+                    /*
+                    let yesterdayDawnWeather = yesterday.info.dawn[1];
+                    let yesterdayDawnTemperature = yesterday.info.dawn[0]+"℃"+"/"+yesterday.info.dawn[2]+"℃";
+                    let yesterdayDawnWind = yesterday.info.dawn[3] + " " + yesterday.info.dawn[4];
+                    vm.myTab[0].dawn.weather = yesterdayDawnWeather;
+                    vm.myTab[0].dawn.temperature = yesterdayDawnTemperature;
+                    vm.myTab[0].dawn.wind = yesterdayDawnWind;
+                    */
+                    let yesterdayDayWeather = yesterday.info.day[1];
+                    let yesterdayDayTemperature = yesterday.info.day[0] + "℃" + "/" + yesterday.info.day[2] + "℃";
+                    let yesterdayDayWind = yesterday.info.day[3] + " " + yesterday.info.day[4];
+                    vm.myTab[0].day.weather = yesterdayDayWeather;
+                    vm.myTab[0].day.temperature = yesterdayDayTemperature;
+                    vm.myTab[0].day.wind = yesterdayDayWind;
+
+                    let yesterdayNightWeather = yesterday.info.night[1];
+                    let yesterdayNightTemperature = yesterday.info.night[0] + "℃" + "/" + yesterday.info.night[2] + "℃";
+                    let yesterdayNightWind = yesterday.info.night[3] + " " + yesterday.info.night[4];
+                    vm.myTab[0].night.weather = yesterdayNightWeather;
+                    vm.myTab[0].night.temperature = yesterdayNightTemperature;
+                    vm.myTab[0].night.wind = yesterdayNightWind;
+
+                    //-----------今天-----------
+                    let today = res.data.weather[0];
+
+                    let todayDate = today.date;
+                    vm.myTab[1].date = todayDate;
+
+                    let todayDawnWeather = today.info.dawn[1];
+                    let todayDawnTemperature = today.info.dawn[0] + "℃" + "/" + today.info.dawn[2] + "℃";
+                    let todayDawnWind = today.info.dawn[3] + " " + today.info.dawn[4];
+                    vm.myTab[1].dawn.weather = todayDawnWeather;
+                    vm.myTab[1].dawn.temperature = todayDawnTemperature;
+                    vm.myTab[1].dawn.wind = todayDawnWind;
+
+                    let todayDayWeather = today.info.day[1];
+                    let todayDayTemperature = today.info.day[0] + "℃" + "/" + today.info.day[2] + "℃";
+                    let todayDayWind = today.info.day[3] + " " + today.info.day[4];
+                    vm.myTab[1].day.weather = todayDayWeather;
+                    vm.myTab[1].day.temperature = todayDayTemperature;
+                    vm.myTab[1].day.wind = todayDayWind;
+
+                    let todayNightWeather = today.info.night[1];
+                    let todayNightTemperature = today.info.night[0] + "℃" + "/" + today.info.night[2] + "℃";
+                    let todayNightWind = today.info.night[3] + " " + today.info.night[4];
+                    vm.myTab[1].night.weather = todayNightWeather;
+                    vm.myTab[1].night.temperature = todayNightTemperature;
+                    vm.myTab[1].night.wind = todayNightWind;
+
+                    //-----------明天-----------
+                    let tomorrow = res.data.weather[1];
+
+                    let tomorrowDate = tomorrow.date;
+                    vm.myTab[2].date = tomorrowDate;
+
+                    let tomorrowDawnWeather = tomorrow.info.dawn[1];
+                    let tomorrowDawnTemperature = tomorrow.info.dawn[0] + "℃" + "/" + tomorrow.info.dawn[2] + "℃";
+                    let tomorrowDawnWind = tomorrow.info.dawn[3] + " " + tomorrow.info.dawn[4];
+                    vm.myTab[2].dawn.weather = tomorrowDawnWeather;
+                    vm.myTab[2].dawn.temperature = tomorrowDawnTemperature;
+                    vm.myTab[2].dawn.wind = tomorrowDawnWind;
+
+                    let tomorrowDayWeather = tomorrow.info.day[1];
+                    let tomorrowDayTemperature = tomorrow.info.day[0] + "℃" + "/" + tomorrow.info.day[2] + "℃";
+                    let tomorrowDayWind = tomorrow.info.day[3] + " " + tomorrow.info.day[4];
+                    vm.myTab[2].day.weather = tomorrowDayWeather;
+                    vm.myTab[2].day.temperature = tomorrowDayTemperature;
+                    vm.myTab[2].day.wind = tomorrowDayWind;
+
+                    let tomorrowNightWeather = tomorrow.info.night[1];
+                    let tomorrowNightTemperature = tomorrow.info.night[0] + "℃" + "/" + tomorrow.info.night[2] + "℃";
+                    let tomorrowNightWind = tomorrow.info.night[3] + " " + tomorrow.info.night[4];
+                    vm.myTab[2].night.weather = tomorrowNightWeather;
+                    vm.myTab[2].night.temperature = tomorrowNightTemperature;
+                    vm.myTab[2].night.wind = tomorrowNightWind;
+
+                    //-----------后天-----------
+                    let acquired = res.data.weather[2];
+
+                    let acquiredDate = acquired.date;
+                    vm.myTab[3].date = acquiredDate;
+
+                    let acquiredDawnWeather = acquired.info.dawn[1];
+                    let acquiredDawnTemperature = acquired.info.dawn[0] + "℃" + "/" + acquired.info.dawn[2] + "℃";
+                    let acquiredDawnWind = acquired.info.dawn[3] + " " + acquired.info.dawn[4];
+                    vm.myTab[3].dawn.weather = acquiredDawnWeather;
+                    vm.myTab[3].dawn.temperature = acquiredDawnTemperature;
+                    vm.myTab[3].dawn.wind = acquiredDawnWind;
+
+                    let acquiredDayWeather = acquired.info.day[1];
+                    let acquiredDayTemperature = acquired.info.day[0] + "℃" + "/" + acquired.info.day[2] + "℃";
+                    let acquiredDayWind = acquired.info.day[3] + " " + acquired.info.day[4];
+                    vm.myTab[3].day.weather = acquiredDayWeather;
+                    vm.myTab[3].day.temperature = acquiredDayTemperature;
+                    vm.myTab[3].day.wind = acquiredDayWind;
+
+                    let acquiredNightWeather = acquired.info.night[1];
+                    let acquiredNightTemperature = acquired.info.night[0] + "℃" + "/" + acquired.info.night[2] + "℃";
+                    let acquiredNightWind = acquired.info.night[3] + " " + acquired.info.night[4];
+                    vm.myTab[3].night.weather = acquiredNightWeather;
+                    vm.myTab[3].night.temperature = acquiredNightTemperature;
+                    vm.myTab[3].night.wind = acquiredNightWind;
+
+                    //-----------大后天-----------
+                    let thereDayAfter = res.data.weather[3];
+
+                    let thereDayAfterDate = thereDayAfter.date;
+                    vm.myTab[4].date = thereDayAfterDate;
+
+                    let thereDayAfterDawnWeather = thereDayAfter.info.dawn[1];
+                    let thereDayAfterDawnTemperature = thereDayAfter.info.dawn[0] + "℃" + "/" + thereDayAfter.info.dawn[2] + "℃";
+                    let thereDayAfterDawnWind = thereDayAfter.info.dawn[3] + " " + thereDayAfter.info.dawn[4];
+                    vm.myTab[4].dawn.weather = thereDayAfterDawnWeather;
+                    vm.myTab[4].dawn.temperature = thereDayAfterDawnTemperature;
+                    vm.myTab[4].dawn.wind = thereDayAfterDawnWind;
+
+                    let thereDayAfterDayWeather = thereDayAfter.info.day[1];
+                    let thereDayAfterDayTemperature = thereDayAfter.info.day[0] + "℃" + "/" + thereDayAfter.info.day[2] + "℃";
+                    let thereDayAfterDayWind = thereDayAfter.info.day[3] + " " + thereDayAfter.info.day[4];
+                    vm.myTab[4].day.weather = thereDayAfterDayWeather;
+                    vm.myTab[4].day.temperature = thereDayAfterDayTemperature;
+                    vm.myTab[4].day.wind = thereDayAfterDayWind;
+
+                    let thereDayAfterNightWeather = thereDayAfter.info.night[1];
+                    let thereDayAfterNightTemperature = thereDayAfter.info.night[0] + "℃" + "/" + thereDayAfter.info.night[2] + "℃";
+                    let thereDayAfterNightWind = thereDayAfter.info.night[3] + " " + thereDayAfter.info.night[4];
+                    vm.myTab[4].night.weather = thereDayAfterNightWeather;
+                    vm.myTab[4].night.temperature = thereDayAfterNightTemperature;
+                    vm.myTab[4].night.wind = thereDayAfterNightWind;
+
+                    //-----------大大后天-----------
+                    let fourDayAfter = res.data.weather[4];
+
+                    let fourDayAfterDate = fourDayAfter.date;
+                    vm.myTab[5].date = fourDayAfterDate;
+
+                    let fourDayAfterDawnWeather = fourDayAfter.info.dawn[1];
+                    let fourDayAfterDawnTemperature = fourDayAfter.info.dawn[0] + "℃" + "/" + fourDayAfter.info.dawn[2] + "℃";
+                    let fourDayAfterDawnWind = fourDayAfter.info.dawn[3] + " " + fourDayAfter.info.dawn[4];
+                    vm.myTab[5].dawn.weather = fourDayAfterDawnWeather;
+                    vm.myTab[5].dawn.temperature = fourDayAfterDawnTemperature;
+                    vm.myTab[5].dawn.wind = fourDayAfterDawnWind;
+
+                    let fourDayAfterDayWeather = fourDayAfter.info.day[1];
+                    let fourDayAfterDayTemperature = fourDayAfter.info.day[0] + "℃" + "/" + fourDayAfter.info.day[2] + "℃";
+                    let fourDayAfterDayWind = fourDayAfter.info.day[3] + " " + fourDayAfter.info.day[4];
+                    vm.myTab[5].day.weather = fourDayAfterDayWeather;
+                    vm.myTab[5].day.temperature = fourDayAfterDayTemperature;
+                    vm.myTab[5].day.wind = fourDayAfterDayWind;
+
+                    let fourDayAfterNightWeather = fourDayAfter.info.night[1];
+                    let fourDayAfterNightTemperature = fourDayAfter.info.night[0] + "℃" + "/" + fourDayAfter.info.night[2] + "℃";
+                    let fourDayAfterNightWind = fourDayAfter.info.night[3] + " " + fourDayAfter.info.night[4];
+                    vm.myTab[5].night.weather = fourDayAfterNightWeather;
+                    vm.myTab[5].night.temperature = fourDayAfterNightTemperature;
+                    vm.myTab[5].night.wind = fourDayAfterNightWind;
+
+                    let life = res.data.life.info;
+
+                    vm.lifeReminder[0].degree = life.kongtiao[0];
+                    vm.lifeReminder[1].degree = life.guomin[0];
+                    vm.lifeReminder[2].degree = life.shushidu[0];
+                    vm.lifeReminder[3].degree = life.chuanyi[0];
+                    vm.lifeReminder[4].degree = life.diaoyu[0];
+                    vm.lifeReminder[5].degree = life.ganmao[0];
+                    vm.lifeReminder[6].degree = life.wuran[0];
+                    vm.lifeReminder[7].degree = life.ziwaixian[0];
+                    vm.lifeReminder[8].degree = life.xiche[0];
+                    vm.lifeReminder[9].degree = life.yundong[0];
+                    vm.lifeReminder[10].degree = life.daisan[0];
+
+                    vm.lifeReminder[0].info = life.kongtiao[1];
+                    vm.lifeReminder[1].info = life.guomin[1];
+                    vm.lifeReminder[2].info = life.shushidu[1];
+                    vm.lifeReminder[3].info = life.chuanyi[1];
+                    vm.lifeReminder[4].info = life.diaoyu[1];
+                    vm.lifeReminder[5].info = life.ganmao[1];
+                    vm.lifeReminder[6].info = life.wuran[1];
+                    vm.lifeReminder[7].info = life.ziwaixian[1];
+                    vm.lifeReminder[8].info = life.xiche[1];
+                    vm.lifeReminder[9].info = life.yundong[1];
+                    vm.lifeReminder[10].info = life.daisan[1];
+
+
+                }).catch(() => {
+                })
+            },
+            showPopup() {
+                this.show = true;
+            },
+            lifeClick: function (checked) {
+                this.lifeShow = !this.lifeShow;
+            },
+            myCancel:function(){
+                this.show=false;
+            }
+        },
+        computed: {},
+    });
+</script>
+
+</body>
+</html>

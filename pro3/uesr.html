@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>我</title>
+    <!--
+    在移动端为了让页面和设备快速的匹配，我们通过设定页面的viewport来处理不同屏幕分辨率的兼容
+    -->
+    <link href="assets/style/vant.css" rel="stylesheet" type="text/css">
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/vant.min.js"></script>
+    <script src="compontents/mytabbar.js"></script>
+    <style>
+        .cellTable1 {
+            background: #1989fa;
+        }
+
+        .cellTable2 {
+            background: #07c160;
+        }
+
+        .cellTable3 {
+            background: #ffd01e;
+        }
+    </style>
+</head>
+<body>
+<section id="app">
+    <van-nav-bar
+            left-arrow
+            title="我的"
+            left-text="返回"
+            v-on:click-left="goBack"
+            v-on:click-right="goCheck"
+    >
+        <van-icon name="gold-coin-o" size="15px" slot="right" :color=checkColor> 签到</van-icon>
+    </van-nav-bar>
+    <section style="line-height: 50px; text-align: center;">
+        <van-button plain round type="primary" size="small" icon="chat" style="width: 15px;"></van-button>
+        <van-button plain round type="primary" size="small" icon="chat" style="width: 15px;"></van-button>
+        <van-button plain round type="primary" size="small" icon="chat" style="width: 15px;"></van-button>
+        <van-button plain round type="primary" size="small" icon="chat" style="width: 15px;"></van-button>
+        <van-button round type="info" color="red" url="#" block="true" size="small" style="width: 100px; margin: auto;">
+            登录/注册
+        </van-button>
+    </section>
+    <van-grid :column-num="4">
+        <van-grid-item
+                v-for="item in gridNav"
+                :key="item"
+                :gridItemId="item.gridItemId"
+                :icon="item.icon"
+                :text="item.text"
+                :info="item.info"
+                :dot="item.dot"
+                v-on:click="gridItemClick(event,item)"
+        />
+    </van-grid>
+    <van-cell-group>
+        <van-cell title="我的关注" value="用户/圈子" is-link url="#"></van-cell>
+        <van-cell title="我的消息" value="回复/赞/通知" is-link url="#"></van-cell>
+        <van-cell title="我的已购" value="购买的课程/直播" is-link url="#"></van-cell>
+    </van-cell-group>
+    <van-divider></van-divider>
+    <van-cell-group>
+        <van-cell title="金币商城" value="嘿！你的500金币" is-link url="#"></van-cell>
+        <van-cell title="京东特供" value="新人领188元红包" is-link url="#"></van-cell>
+        <van-cell title="易览天下" value="三分钟了解天下事" is-link url="#"></van-cell>
+        <van-cell title="用户鉴帖" value="邀你鉴定跟贴质量" is-link url="#"></van-cell>
+        <van-cell title="我的钱包" value="" is-link url="#"></van-cell>
+    </van-cell-group>
+    <van-divider></van-divider>
+    <van-cell-group>
+        <van-cell title="免流量看新闻" value="" is-link url="#"></van-cell>
+        <van-cell title="意见反馈" value="" is-link url="#"></van-cell>
+        <van-cell title="扫一扫" value="" is-link url="#"></van-cell>
+        <van-cell title="设置" value="" is-link url="#"></van-cell>
+    </van-cell-group>
+    <mytabbar :active="3"></mytabbar>
+    <address v-if=false>
+        Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
+    </address>
+</section>
+<script>
+    let app = new Vue({
+        el: "#app",
+        data: {
+            active: 3,
+            checkColor: "#1989fa",
+            gridNav: [
+                {
+                    gridItemId: 'item6',
+                    icon: 'bullhorn-o',
+                    text: '动态',
+                    url: '#',
+                    dot: true,
+                },
+                {
+                    gridItemId: 'item3',
+                    icon: 'comment-o',
+                    text: '跟帖',
+                    url: '#',
+                    info: 99,
+                },
+                {
+                    gridItemId: 'item2',
+                    icon: 'star-o',
+                    text: '收藏',
+                    url: '#',
+                },
+                {
+                    gridItemId: 'item4',
+                    icon: 'clock-o',
+                    text: '历史',
+                    url: '#'
+                },
+            ]
+        },
+        watch: {},
+        methods: {
+            goBack: function (event) {
+                window.location.href = 'index.html';
+            },
+            gridItemClick: function (event, gridItem) {
+                console.log(gridItem);
+                let confirmFlag = confirm('你确定要打开' + gridItem.text + '功能吗？');
+                if (confirmFlag) {
+                    window.location.href = gridItem.url;
+                }
+            },
+            goCheck: function (event) {
+                console.log("你已签到");
+                this.checkColor = "#ffd01e";
+            },
+        }
+    });
+</script>
+</body>
+</html>

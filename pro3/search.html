@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>搜索</title>
+    <!--
+    在移动端为了让页面和设备快速的匹配，我们通过设定页面的viewport来处理不同屏幕分辨率的兼容
+    -->
+    <link href="assets/style/vant.css" rel="stylesheet" type="text/css">
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/vant.min.js"></script>
+    <script src="compontents/mytabbar.js"></script>
+    <style>
+        .cellTable1 {
+            background: #1989fa;
+        }
+
+        .cellTable2 {
+            background: #07c160;
+        }
+
+        .cellTable3 {
+            background: #ffd01e;
+        }
+    </style>
+</head>
+<body>
+<section id="app">
+    <van-nav-bar
+            title="搜索"
+            left-arrow
+            left-text="返回"
+            v-on:click-left="goBack"
+    ></van-nav-bar>
+    <form action="/">
+        <van-search
+                v-model="keywords"
+                placeholder="请输入搜索关键词"
+                show-action
+                shape="round"
+                @search="onSearch"
+                @cancel="onCancel"
+                @focus="onFocus"
+                @blur="outFocus"
+        >
+        </van-search>
+        <van-dropdown-menu>
+            <van-dropdown-item
+                    ref="hotnews"
+                    v-model="value"
+                    :options="option"
+                    :title="downTitle"
+            />
+        </van-dropdown-menu>
+    </form>
+
+    <mytabbar :active="1"></mytabbar>
+    <address v-if=false>
+        Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
+    </address>
+</section>
+<script>
+    let app = new Vue({
+        el: "#app",
+        data: {
+            active: 1,
+            keywords: '',
+            downTitle: "热点新闻",
+            value: "hot",
+            option: [
+                {text: '习近平告诉你，我们的制度为何深得人民拥护', value: 0, icon: "fire-o"},
+                {text: '\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来', value: 1, icon: "fire-o"},
+                {text: '英国称卡车案39名死者系越南人 越外交部:人道惨剧', value: 2, icon: "fire-o"},
+                {text: '震撼！湖人死里逃生 谁还说詹皇老了', value: 3},
+            ],
+        },
+        watch: {
+            active: function (newVal, oldVal) {
+                console.log("newVal:%o,oldVal:%o", newVal, oldVal);
+            }
+        },
+        methods: {
+            goBack: function (event) {
+                window.location.href = 'index.html';
+            },
+            onSearch: function (value) {
+                window.location.href = "https://www.baidu.com/s?wd=" + value;
+                console.log("https://www.baidu.com/s?wd=" + value);
+            },
+            onCancel: function () {
+                console.log("你点击了取消");
+            },
+            onFocus: function () {
+                console.log("你获得了焦点");
+                this.$refs.hotnews.toggle(true);
+
+            },
+            outFocus: function () {
+                console.log("你失去了焦点");
+                this.$refs.hotnews.toggle(false);
+            }
+
+        }
+    });
+</script>
+</body>
+</html>

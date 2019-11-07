@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>首页</title>
+
+    <link href="assets/style/vant.css" rel="stylesheet" type="text/css">
+    <link href="assets/style/index.css" rel="stylesheet" type="text/css">
+    <script src="lib/vue.min.js"></script>
+    <script src="lib/vant.min.js"></script>
+    <script src="compontents/mytabbar.js"></script>
+    <style>
+        .cellTable1 {
+            background: #1989fa;
+        }
+
+        .cellTable2 {
+            background: #07c160;
+        }
+
+        .cellTable3 {
+            background: #ffd01e;
+        }
+    </style>
+</head>
+<body>
+
+<section id="app">
+    <van-nav-bar title="首页"></van-nav-bar>
+    <van-notice-bar mode="closeable">
+        www.dawnlionel.club-----www.dawnlionel.club-----www.dawnlionel.club
+    </van-notice-bar>
+
+    <van-tabs v-model="active" sticky>
+        <van-tab v-for="item in news" :title="item.tabName">
+            <van-swipe :autoplay="3000" indicator-color="white">
+                <van-swipe-item v-for="img in item.imgSwipe">
+                    <van-image
+                            :src="img.imgUrl"
+                            :url="img.linkUrl"
+                    />
+                </van-swipe-item>
+            </van-swipe>
+            <van-list
+                    v-model="loading"
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad"
+            >
+
+                <van-cell
+                        v-for="content in list"
+                        :title="content.title"
+                        :label="content.source+content.time+content.reply"
+                        :url="content.url"
+                        center="true"
+                >
+                    <div slot="default">
+                        <van-image
+                                width="120"
+                                height="80"
+                                :src="content.img"
+                        />
+                    </div>
+                </van-cell>
+
+            </van-list>
+        </van-tab>
+    </van-tabs>
+
+    <mytabbar :active="0"></mytabbar>
+    <address v-if=false>
+        Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
+    </address>
+
+</section>
+<script>
+    let app = new Vue({
+        el: "#app",
+        data: {
+            active: 0,
+            loading: false,
+            finished: false,
+            news: [
+                {
+                    tabName: "推荐",
+                    imgSwipe: [
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "article.html",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "article.html",
+                        },
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "article.html",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "article.html",
+                        },
+                    ],
+
+                },
+                {
+                    tabName: "国内",
+                    imgSwipe: [
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                    ],
+
+                },
+                {
+                    tabName: "国外",
+                    imgSwipe: [
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                    ],
+
+                },
+                {
+                    tabName: "历史",
+                    imgSwipe: [
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                    ],
+                },
+                {
+                    tabName: "军事",
+                    imgSwipe: [
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                    ],
+                },
+                {
+                    tabName: "科技",
+                    imgSwipe: [
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new1.png",
+                            linkUrl: "#",
+                        },
+                        {
+                            imgUrl: "assets/img/new2.png",
+                            linkUrl: "#",
+                        },
+                    ],
+                },
+            ],
+            list: [
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+                {
+                    title: "习近平告诉你，我们的制度为何深得人民拥护",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/sImg.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new1.png",
+                    url: "article.html",
+
+                },
+                {
+                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
+                    source: "source ",
+                    time: "time ",
+                    reply: "reply",
+                    img: "assets/img/new2.png",
+                    url: "article.html",
+                },
+            ],
+
+        },
+        methods: {
+            onLoad() {
+                // 异步更新数据
+                setTimeout(() => {
+                    for (let i = 0; i < 10; i++) {
+                        //this.list.push(this.list.length + 1);
+                    }
+                    // 加载状态结束
+                    this.loading = false;
+
+                    // 数据全部加载完成
+                    if (this.list.length >= 40) {
+                        this.finished = true;
+                    }
+                }, 500);
+            },
+
+        }
+    });
+</script>
+</body>
+</html>
