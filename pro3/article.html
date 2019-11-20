@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+
     <title>内容页</title>
     <!--
     在移动端为了让页面和设备快速的匹配，我们通过设定页面的viewport来处理不同屏幕分辨率的兼容
@@ -12,6 +13,7 @@
     <script src="lib/vue.min.js"></script>
     <script src="lib/vant.min.js"></script>
     <script src="compontents/mytabbar.js"></script>
+    <script src="lib/axios.js"></script>
     <style>
         .cellTable1 {
             background: #1989fa;
@@ -34,8 +36,9 @@
             left-text="返回"
             v-on:click-left="goBack"
     >
-        <van-icon name="star-o" size="20px" :color=starColor slot="right" @click="onClick"></van-icon>
-        <van-icon name="ellipsis" size="20px" slot="right"></van-icon>
+        <van-icon name="star-o" size="20px" :color=starColor slot="right" @click="Collection"
+                  style="margin-right: 5px;"></van-icon>
+        <van-icon name="ellipsis" size="20px" slot="right" style="margin-left: 5px;"></van-icon>
     </van-nav-bar>
 </section>
 <section id="app2" style="margin: 15px">
@@ -59,23 +62,35 @@
             channel: "新闻频道",
             starColor: "#1989fa",
             colorFlag: 0,
+            CollectionMsg: ["收藏成功", "取消收藏"],
         },
         watch: {},
         methods: {
             goBack: function (event) {
                 window.location.href = 'index.html';
             },
-            onClick: function (event) {
+            Collection: function (event) {
                 if (this.colorFlag == 0) {
-                    console.log("你已收藏");
+                    this.$notify({type: 'success', message: this.CollectionMsg[this.colorFlag], duration: 400});
+                    this.$toast({
+                        message: this.CollectionMsg[this.colorFlag],
+                        icon: 'like-o',
+                        duration: 400
+                    });
                     this.colorFlag = (this.colorFlag + 1) % 2;
                     this.starColor = "#ffd01e";
                 } else {
-                    console.log("你已取消收藏");
+                    this.$notify({type: 'danger', message: this.CollectionMsg[this.colorFlag], duration: 400});
+                    this.$toast({
+                        message: this.CollectionMsg[this.colorFlag],
+                        icon: 'warn-o',
+                        duration: 400
+                    });
                     this.colorFlag = (this.colorFlag + 1) % 2;
                     this.starColor = "#1989fa";
                 }
             }
+
 
         }
     });

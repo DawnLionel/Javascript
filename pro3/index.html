@@ -5,12 +5,12 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
     <title>首页</title>
-
     <link href="assets/style/vant.css" rel="stylesheet" type="text/css">
     <link href="assets/style/index.css" rel="stylesheet" type="text/css">
     <script src="lib/vue.min.js"></script>
     <script src="lib/vant.min.js"></script>
     <script src="compontents/mytabbar.js"></script>
+    <script src="lib/axios.js"></script>
     <style>
         .cellTable1 {
             background: #1989fa;
@@ -26,7 +26,6 @@
     </style>
 </head>
 <body>
-
 <section id="app">
     <van-nav-bar title="首页"></van-nav-bar>
     <van-notice-bar mode="closeable">
@@ -49,7 +48,6 @@
                     finished-text="没有更多了"
                     @load="onLoad"
             >
-
                 <van-cell
                         v-for="content in list"
                         :title="content.title"
@@ -65,16 +63,13 @@
                         />
                     </div>
                 </van-cell>
-
             </van-list>
         </van-tab>
     </van-tabs>
-
     <mytabbar :active="0"></mytabbar>
     <address v-if=false>
         Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
     </address>
-
 </section>
 <script>
     let app = new Vue({
@@ -104,7 +99,6 @@
                             linkUrl: "article.html",
                         },
                     ],
-
                 },
                 {
                     tabName: "国内",
@@ -126,7 +120,6 @@
                             linkUrl: "#",
                         },
                     ],
-
                 },
                 {
                     tabName: "国外",
@@ -148,7 +141,6 @@
                             linkUrl: "#",
                         },
                     ],
-
                 },
                 {
                     tabName: "历史",
@@ -222,7 +214,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -231,7 +222,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -248,7 +238,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -257,7 +246,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -274,7 +262,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -283,7 +270,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -300,7 +286,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -309,7 +294,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -326,7 +310,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -335,7 +318,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -352,7 +334,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -361,7 +342,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -378,7 +358,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -387,7 +366,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -404,7 +382,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -413,7 +390,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -430,7 +406,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -439,7 +414,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -456,7 +430,6 @@
                     reply: "reply",
                     img: "assets/img/sImg.png",
                     url: "article.html",
-
                 },
                 {
                     title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
@@ -465,7 +438,6 @@
                     reply: "reply",
                     img: "assets/img/new1.png",
                     url: "article.html",
-
                 },
                 {
                     title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
@@ -476,7 +448,6 @@
                     url: "article.html",
                 },
             ],
-
         },
         methods: {
             onLoad() {

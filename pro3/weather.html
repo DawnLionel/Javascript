@@ -27,6 +27,8 @@
             background: #ffd01e;
         }
     </style>
+    <script src="js/global.js"></script>
+    <script src="js/config.js"></script>
 </head>
 <body>
 <section id="app">
@@ -136,7 +138,7 @@
             myTab: [
                 {
                     week: "昨天",
-                    weekSeen:false,
+                    weekSeen: false,
                     date: "",
                     dawn: {
                         seen: false,
@@ -162,7 +164,7 @@
                 },
                 {
                     week: "今天",
-                    weekSeen:true,
+                    weekSeen: true,
                     date: "",
                     dawn: {
                         seen: true,
@@ -188,7 +190,7 @@
                 },
                 {
                     week: "明天",
-                    weekSeen:true,
+                    weekSeen: true,
                     date: "",
                     dawn: {
                         seen: true,
@@ -214,7 +216,7 @@
                 },
                 {
                     week: "后天",
-                    weekSeen:true,
+                    weekSeen: true,
                     date: "",
                     dawn: {
                         seen: true,
@@ -240,7 +242,7 @@
                 },
                 {
                     week: "大后天",
-                    weekSeen:true,
+                    weekSeen: true,
                     date: "",
                     dawn: {
                         seen: true,
@@ -266,7 +268,7 @@
                 },
                 {
                     week: "大大后天",
-                    weekSeen:true,
+                    weekSeen: true,
                     date: "",
                     dawn: {
                         seen: true,
@@ -350,8 +352,8 @@
 
             ],
         },
-        mounted:function (){
-            this.getAreaInfo([{code: "", name: ""},{code: "", name: ""}]);
+        mounted: function () {
+            this.getAreaInfo([{code: "", name: ""}, {code: "", name: ""}]);
         },
         methods: {
             goBack: function (event) {
@@ -376,7 +378,7 @@
                     //----------------------------------
                     let pubtime = res.data.realtime.date + " " + res.data.realtime.time;
                     vm.pub = "发布时间：" + pubtime;
-                    vm.city=res.data.area[1][0];
+                    vm.city = res.data.area[1][0];
                     let pm25 = res.data.pm25.pm25[0];
                     let aqi = res.data.pm25.aqi[0];
                     vm.pm25 = "PM2.5指数：" + pm25;
@@ -580,8 +582,8 @@
             lifeClick: function (checked) {
                 this.lifeShow = !this.lifeShow;
             },
-            myCancel:function(){
-                this.show=false;
+            myCancel: function () {
+                this.show = false;
             }
         },
         computed: {},
