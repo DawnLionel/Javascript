@@ -39,7 +39,7 @@
                     <van-image
                             :src="img.imgUrl"
                             :url="img.linkUrl"
-                    />
+                    ></van-image>
                 </van-swipe-item>
             </van-swipe>
             <van-list
@@ -49,7 +49,7 @@
                     @load="onLoad"
             >
                 <van-cell
-                        v-for="content in list"
+                        v-for="content in xlist"
                         :title="content.title"
                         :label="content.source+content.time+content.reply"
                         :url="content.url"
@@ -71,13 +71,23 @@
         Written by <a href="dawnlionel.club">DawnLionel</a>.<br>
     </address>
 </section>
+
 <script>
     let app = new Vue({
         el: "#app",
         data: {
             active: 0,
             loading: false,
+            error: false,
             finished: false,
+            newsList:{
+                swipe:[
+
+                ],
+                dataList:[
+
+                ]
+            },
             news: [
                 {
                     tabName: "推荐",
@@ -231,241 +241,27 @@
                     img: "assets/img/new2.png",
                     url: "article.html",
                 },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
-                {
-                    title: "习近平告诉你，我们的制度为何深得人民拥护",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/sImg.png",
-                    url: "article.html",
-                },
-                {
-                    title: "\"骂\"贫困户扶贫女干部又出金句:天天醉酒钱不会来",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new1.png",
-                    url: "article.html",
-                },
-                {
-                    title: "英国称卡车案39名死者系越南人 越外交部:人道惨剧",
-                    source: "source ",
-                    time: "time ",
-                    reply: "reply",
-                    img: "assets/img/new2.png",
-                    url: "article.html",
-                },
             ],
+            xlist:[],
         },
         methods: {
             onLoad() {
                 // 异步更新数据
+                let x=0;
                 setTimeout(() => {
-                    for (let i = 0; i < 10; i++) {
-                        //this.list.push(this.list.length + 1);
+                    for (let i = x; i < 10; i++) {
+                        this.xlist[i]=this.list[i];
                     }
+                    x=x+10;
                     // 加载状态结束
                     this.loading = false;
 
                     // 数据全部加载完成
-                    if (this.list.length >= 40) {
+                    if (this.xlist.length >= 40) {
                         this.finished = true;
                     }
                 }, 500);
             },
-
         }
     });
 </script>
